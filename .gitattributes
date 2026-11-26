@@ -1,0 +1,10 @@
+# 줄바꿈을 LF로 통일 (Windows의 CRLF 변환 경고 방지)
+* text=auto eol=lf
+
+# 바이너리
+*.png binary
+*.ico binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
