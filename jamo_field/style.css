@@ -1,0 +1,199 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #1b1b1f;
+}
+
+#scene {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* ===== 우측 하단 패널 ===== */
+#panel {
+  --cell: 38px;
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  max-width: calc(100vw - 32px);
+  box-sizing: border-box;
+  font: 13px sans-serif;
+  color: #444;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  user-select: none;
+}
+
+/* 크기 선택기: 7x7 격자를 왼쪽 위부터 드래그 */
+#picker-row {
+  display: flex;
+  justify-content: center;  /* 상자 안에서 가운데 */
+}
+
+#picker {
+  display: grid;
+  grid-template-columns: repeat(7, 14px);
+  gap: 2px;
+  cursor: pointer;
+  touch-action: none;  /* 터치 드래그 시 스크롤 방지 */
+}
+
+.pick {
+  width: 14px;
+  height: 14px;
+  background: #e2e2e2;
+}
+
+.pick.on {
+  background: #555;
+}
+
+/* 입력 칸 */
+#cells-wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;  /* 입력 칸 묶음을 상자 안에서 가운데 */
+}
+
+#cells {
+  display: grid;
+  gap: 4px;
+}
+
+.cell {
+  width: var(--cell);
+  height: var(--cell);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: #111;
+  background: #fff;
+  border: 1px solid #c8c8c8;
+  border-radius: 4px;
+  cursor: text;
+}
+
+.cell.active {
+  border-color: #222;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.25);
+}
+
+/* 숨은 입력창: 칸 위에 겹쳐 두어 IME 후보창이 칸 근처에 뜨게 한다 */
+#typing {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 0;
+  border: 0;
+  font-size: 16px;  /* 모바일에서 포커스 시 확대 방지 */
+  opacity: 0;
+  pointer-events: none;
+}
+
+#hint {
+  font-size: 11px;
+  color: #777;
+  text-align: center;
+}
+
+/* ===== 좌측 하단 패널: 배경색 팔레트 ===== */
+/* 좌측 하단 세로 스택: 초성만 보기 / 배경색 / 이미지 저장 (폭은 배경색 상자에 맞춤) */
+#left-stack {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.pill {
+  padding: 9px 14px;
+  font: 13px sans-serif;
+  color: #444;
+  background: rgba(255, 255, 255, 0.92);
+  border: 0;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  user-select: none;
+}
+
+.pill:hover {
+  background: #fff;
+}
+
+.pill.on {
+  color: #fff;
+  background: #333;
+}
+
+/* 화면 중앙 하단 안내 문구 (박스 없음) */
+#nav-hint {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  max-width: 90vw;
+  font: 12px sans-serif;
+  color: #666;
+  text-align: center;
+  pointer-events: none;  /* 아래 캔버스의 회전/줌 조작을 가로막지 않게 */
+  user-select: none;
+}
+
+#bg-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  font: 13px sans-serif;
+  color: #444;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  user-select: none;
+}
+
+/* '배경색' 라벨 오른쪽 끝에 흰색 칸 (3x3 격자의 오른쪽 위) */
+#bg-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#swatches {
+  display: grid;
+  grid-template-columns: repeat(3, 28px);
+  gap: 4px;
+}
+
+.swatch {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.swatch:hover {
+  border-color: #666;
+}
+
+.swatch.selected {
+  border-color: #222;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.35);
+}

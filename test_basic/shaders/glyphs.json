@@ -1,0 +1,56 @@
+{
+  "ㄱ": [
+    { "rect": [0, 0, 1, 1], "edges": ["top", "right"] }
+  ],
+  "ㄴ": [
+    { "rect": [0, 0, 1, 1], "edges": ["left", "bottom"] }
+  ],
+  "ㄷ": [
+    { "rect": [0, 0, 1, 1], "edges": ["top", "left", "bottom"] }
+  ],
+  "ㄹ": [
+    { "rect": [0, 0.5, 1, 1], "edges": ["top", "right"] },
+    { "rect": [0, 0, 1, 0.5], "edges": ["top", "left", "bottom"] }
+  ],
+  "ㅁ": [
+    { "rect": [0, 0, 1, 1], "edges": ["top", "right", "bottom", "left"] }
+  ],
+  "ㅂ": [
+    { "rect": [0, 0.5, 1, 1], "edges": ["left", "right"] },
+    { "rect": [0, 0, 1, 0.5], "edges": ["top", "right", "bottom", "left"] }
+  ],
+  "ㅅ": [
+    { "rect": [0, 0, 0.5, 1], "edges": ["diagRight"] },
+    { "rect": [0.5, 0, 1, 1], "edges": ["diagLeft"] }
+  ],
+  "ㅇ": [
+    { "rect": [0, 0, 1, 1], "edges": ["circle"] }
+  ],
+  "ㅈ": [
+    { "rect": [0, 0, 0.5, 1], "edges": ["top", "diagRight"] },
+    { "rect": [0.5, 0, 1, 1], "edges": ["top", "diagLeft"] }
+  ],
+  "ㅊ": [
+    { "rect": [0.5, 0.5, 1, 1], "edges": ["left"] },
+    { "rect": [0, 0, 0.5, 0.5], "edges": ["top", "diagRight"] },
+    { "rect": [0.5, 0, 1, 0.5], "edges": ["top", "diagLeft"] }
+  ],
+  "ㅋ": [
+    { "rect": [0, 0.5, 1, 1], "edges": ["top", "right"] },
+    { "rect": [0, 0, 1, 0.5], "edges": ["top", "right"] }
+  ],
+  "ㅌ": [
+    { "rect": [0, 0.5, 1, 1], "edges": ["top", "left"] },
+    { "rect": [0, 0, 1, 0.5], "edges": ["top", "left", "bottom"] }
+  ],
+  "ㅍ": [
+    { "rect": [0, 0, 0.3333, 1], "edges": ["top", "bottom"] },
+    { "rect": [0.3333, 0, 0.6667, 1], "edges": ["top", "bottom", "left"] },
+    { "rect": [0.6667, 0, 1, 1], "edges": ["top", "bottom", "left"] }
+  ],
+  "ㅎ": [
+    { "rect": [0, 0.5, 0.5, 1], "edges": ["bottom"] },
+    { "rect": [0.5, 0.5, 1, 1], "edges": ["left", "bottom"] },
+    { "rect": [0, 0, 1, 0.5], "edges": ["circle"] }
+  ]
+}

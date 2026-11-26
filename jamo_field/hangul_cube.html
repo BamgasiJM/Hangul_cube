@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ㅎㄱㅋㅂ</title>
+<link rel="icon" href="image/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="image/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="image/favicon-16x16.png">
+<link rel="apple-touch-icon" href="image/apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+<canvas id="scene"></canvas>
+
+<!-- 우측 하단 패널: 크기 선택 + 입력 칸 -->
+<div id="panel">
+  <div id="picker-row">
+    <div id="picker" title="드래그해서 열 × 행 크기 선택"></div>
+  </div>
+  <div id="cells-wrap">
+    <div id="cells"></div>
+    <!-- 실제 입력을 받는 숨은 입력창 (한글 IME용). 화면에는 칸(cell)으로 보인다 -->
+    <input id="typing" type="text" autocomplete="off" spellcheck="false" aria-label="한글 입력">
+  </div>
+  <div id="hint">칸을 클릭하고 입력 · 격자를 드래그해 크기 선택</div>
+</div>
+
+<!-- 좌측 하단: 초성만 보기 토글 / 배경색 팔레트 / 이미지 저장 (위에서 아래 순서) -->
+<div id="left-stack">
+  <button id="top-view" class="pill" type="button" aria-pressed="false">초성만 보기</button>
+
+  <!-- 배경색 팔레트 (색은 main.js의 BACKGROUND_PALETTE) -->
+  <div id="bg-panel">
+    <div id="bg-header">
+      <div id="bg-label">배경색</div>
+      <button id="white-swatch" class="swatch" type="button"></button>
+    </div>
+    <div id="swatches"></div>
+  </div>
+
+  <button id="save" class="pill" type="button">이미지 저장</button>
+</div>
+
+<!-- 화면 중앙 하단 안내 문구 (박스 없이 텍스트만) -->
+<div id="nav-hint">드래그하여 회전 · 스크롤하여 줌 인/아웃 · 우클릭 드래그로 이동</div>
+
+<script type="module" src="main.js"></script>
+</body>
+</html>

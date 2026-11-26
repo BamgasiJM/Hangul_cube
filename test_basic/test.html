@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corner Gradient</title>
+<style>
+  html, body {
+    margin: 0;
+    background: transparent;
+  }
+  canvas {
+    display: block;
+    margin: 0 auto;  /* 가로 중앙 정렬, 위아래 여백 없음 */
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<script>
+// ===== WebGL2 초기화 =====
+const canvas = document.getElementById('c');
+const gl = canvas.getContext('webgl2');
+if (!gl) throw new Error('WebGL2를 지원하지 않는 환경입니다.');
+
+function compile(type, src) {
+  const sh = gl.createShader(type);
+  gl.shaderSource(sh, src);
+  gl.compileShader(sh);
+  if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+    throw new Error(gl.getShaderInfoLog(sh));
+  }
+  return sh;
+}
+
+// ===== 외부 파일 로드 =====
+async function loadText(path) {
+  const res = await fetch(path);
+  if (!res.ok) throw new Error(`로드 실패: ${path} (${res.status})`);
+  return res.text();
+}
+
+// ===== 글자 데이터 → 유니폼 변환 =====
+const MAX_CELLS = 8;  // frag.glsl의 MAX_CELLS와 동일하게 유지
+const EDGE_BIT = { top: 1, right: 2, bottom: 4, left: 8, diagRight: 16, diagLeft: 32, circle: 64 };
+
+// 글자 한 개가 차지하는 정사각형 블록 크기(px). frag.glsl의 ART_SIZE와 동일하게 유지
+const BLOCK_SIZE = 500;
+
+let glyphs = {};
+let glyphNames = [];
+let loc = {};
+
+function uploadGlyph(cells) {
+  if (cells.length > MAX_CELLS) throw new Error(`칸이 너무 많습니다 (최대 ${MAX_CELLS})`);
+  const rects = new Float32Array(MAX_CELLS * 4);
+  const edges = new Int32Array(MAX_CELLS);
+  cells.forEach((cell, i) => {
+    rects.set(cell.rect, i * 4);
+    edges[i] = cell.edges.reduce((m, name) => m | EDGE_BIT[name], 0);
+  });
+  gl.uniform1i(loc.cellCount, cells.length);
+  gl.uniform4fv(loc.cellRect, rects);
+  gl.uniform1iv(loc.cellEdges, edges);
+}
+
+// 모든 글자를 세로로 나열해서 한 번에 그림 (정적 이미지이므로 1회만)
+function renderAll() {
+  const count = glyphNames.length;
+  canvas.width = BLOCK_SIZE;
+  canvas.height = BLOCK_SIZE * count;
+  gl.uniform2f(loc.resolution, BLOCK_SIZE, BLOCK_SIZE);
+
+  glyphNames.forEach((name, i) => {
+    // WebGL은 y가 아래에서 위로 증가하므로 첫 글자가 맨 위에 오도록 뒤집음
+    const y = (count - 1 - i) * BLOCK_SIZE;
+    gl.viewport(0, y, BLOCK_SIZE, BLOCK_SIZE);
+    gl.uniform2f(loc.blockOrigin, 0, y);
+    uploadGlyph(glyphs[name]);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  });
+}
+
+async function main() {
+  const [vertexSrc, fragmentSrc, glyphJson] = await Promise.all([
+    loadText('shaders/vert.glsl'),
+    loadText('shaders/frag.glsl'),
+    loadText('shaders/glyphs.json'),
+  ]);
+  glyphs = JSON.parse(glyphJson);
+  glyphNames = Object.keys(glyphs);
+
+  const program = gl.createProgram();
+  gl.attachShader(program, compile(gl.VERTEX_SHADER, vertexSrc));
+  gl.attachShader(program, compile(gl.FRAGMENT_SHADER, fragmentSrc));
+  gl.linkProgram(program);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    throw new Error(gl.getProgramInfoLog(program));
+  }
+  gl.useProgram(program);
+
+  loc = {
+    resolution: gl.getUniformLocation(program, 'u_resolution'),
+    blockOrigin: gl.getUniformLocation(program, 'u_blockOrigin'),
+    cellCount:  gl.getUniformLocation(program, 'u_cellCount'),
+    cellRect:   gl.getUniformLocation(program, 'u_cellRect'),
+    cellEdges:  gl.getUniformLocation(program, 'u_cellEdges'),
+  };
+
+  renderAll();
+}
+
+main().catch(err => console.error(err));
+</script>
+</body>
+</html>
